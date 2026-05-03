@@ -46,6 +46,11 @@ async function bootstrap() {
     })
     app.use('/auth', limiter) // Apply mostly to auth routes
 
+    // Root Welcome Route
+    app.get('/', (req, res) => {
+        res.send('<h1>Welcome to KSI Digital Pattern API</h1><p>Status: <span style="color: green">Online</span></p>');
+    });
+
     // 6. Middlewares
     const isDev = NODE_ENV === 'development'
     const rawOrigins = process.env.FRONTEND_URL ? process.env.FRONTEND_URL.split(',') : '*'
