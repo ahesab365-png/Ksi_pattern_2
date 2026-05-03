@@ -1,4 +1,5 @@
 import { CategoryModel } from '../../DB/model/index.js';
+import cloudinary from '../../utils/cloudinary.js';
 
 export const getAllCategories = async (req, res) => {
     try {
@@ -32,9 +33,14 @@ export const upsertCategory = async (req, res) => {
 export const deleteCategory = async (req, res) => {
     try {
         const { id } = req.params;
+        const category = await CategoryModel.findById(id);
+        if (category && category.image) {
+            const publicId = category.image.split('/').pop().split('.')[0]; // Simple extraction
+            if (publicId) await cloudinary.uploader.destroy(publicId).catch(err => console.error(err));
+        }
         await CategoryModel.findByIdAndDelete(id);
-        return res.status(200).json({ message: "Category deleted successfully" });
+        return res.status(200).json({ message: "تم مسح القسم والصورة بنجاح" });
     } catch (error) {
-        return res.status(500).json({ message: "Error deleting category", error: error.message });
+        return res.status(500).json({ message: "خطأ في مسح القسم", error: error.message });
     }
 };
