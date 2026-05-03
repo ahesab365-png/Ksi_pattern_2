@@ -49,10 +49,19 @@ export const getArticleById = async (req, res, next) => {
 
 export const createArticle = async (req, res, next) => {
     try {
+        const { title, content, image, program, mainCategory, category } = req.body;
+        
+        // Manual validation for cleaner error messages
+        if (!title || !content || !image || !program || !mainCategory || !category) {
+            return res.status(400).json({ 
+                message: "جميع الحقول (العنوان، المحتوى، الصورة، البرنامج، القسم الرئيسي، التصنيف) مطلوبة" 
+            });
+        }
+
         console.log("Attempting to create a new article...");
         const article = await ArticleModel.create(req.body);
         console.log("Article created successfully:", article._id);
-        return res.status(201).json({ message: "Article created successfully", article });
+        return res.status(201).json({ message: "تم إنشاء المقالة بنجاح", article });
     } catch (error) {
         console.error("POST Article Error:", error);
         return next(error);

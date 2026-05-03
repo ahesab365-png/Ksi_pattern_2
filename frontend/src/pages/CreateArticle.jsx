@@ -77,6 +77,9 @@ const CreateArticle = () => {
         if (!category.trim()) {
             return MySwal.fire({ title: 'بيانات ناقصة', text: 'يرجى تحديد نوع القطعة قبل النشر', icon: 'warning', confirmButtonText: 'حسناً' });
         }
+        if (!categoryImage) {
+            return MySwal.fire({ title: 'بيانات ناقصة', text: 'يرجى رفع صورة غلاف (Thumbnail) للمقالة قبل النشر', icon: 'warning', confirmButtonText: 'حسناً' });
+        }
         if (blocks.length === 0) {
             return MySwal.fire({ title: 'محتوى فارغ', text: 'يرجى إضافة قسم واحد على الأقل للمقال قبل النشر', icon: 'warning', confirmButtonText: 'حسناً' });
         }
@@ -87,6 +90,7 @@ const CreateArticle = () => {
         const articleData = { 
           title, 
           content, 
+          image: categoryImage, // Main article thumbnail
           program, 
           mainCategory, 
           category, 
