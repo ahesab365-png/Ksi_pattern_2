@@ -27,7 +27,7 @@ export const articleService = {
 
         if (!res.ok) {
             const errData = await res.json().catch(() => ({}));
-            throw new Error(errData.message || 'فشل رفع الصورة');
+            throw new Error(errData.message || 'فشل رفع الصورة، يرجى التواصل مع الدعم الفني');
         }
         const data = await res.json();
         return data.imageUrl; // Cloudinary URL

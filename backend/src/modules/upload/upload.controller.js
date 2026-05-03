@@ -15,7 +15,8 @@ export const uploadImage = async (req, res, next) => {
         const uploadResponse = await cloudinary.uploader.upload(image, {
             folder: 'KSI/articles',
             public_id: `${Date.now()}-${fileName ? fileName.split('.')[0] : 'image'}`,
-            resource_type: "auto"
+            resource_type: "auto",
+            timestamp: Math.round(new Date().getTime() / 1000) // Force current timestamp
         });
 
         console.log('☁️ Cloudinary response (Base64):', {
@@ -29,7 +30,12 @@ export const uploadImage = async (req, res, next) => {
             publicId: uploadResponse.public_id
         });
     } catch (error) {
-        console.error('❌ Upload controller error (Base64):', error);
-        return res.status(500).json({ message: "فشل الرفع إلى الخادم السحابي", details: error.message });
+        // Keep technical details in server logs only for security
+        console.error('❌ Cloudinary Upload Error Details:', error);
+        
+        return res.status(500).json({ 
+            message: "فشل الرفع إلى الخادم السحابي",
+            hint: "تواصل مع الإدارة للدعم الفني"
+        });
     }
 };
